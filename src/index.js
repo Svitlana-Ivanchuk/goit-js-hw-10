@@ -1,20 +1,11 @@
-import axios from 'axios';
+import fetchBreeds from './cat-api';
 
-const axios = require('axios');
+const selectEl = document.querySelector('.breed-select');
 
-axios.defaults.headers.common['x-api-key'] =
-  'live_cU8g1YfvYO4Xl2zaEwj6ftSMwAfh4kzsyfbHD65YbVDYIG5CbqVXU0GPY1Qhlcxx';
+fetchBreeds()
+  .then(data => (selectEl.innerHTML = createMarkup(data.id)))
+  .catch(error => console.log(error));
 
-axios
-  .get('https://api.thecatapi.com/v1/images/search?breed_ids={breed.id}')
-  .then(function (response) {
-    // обработка успешного запроса
-    console.log(response);
-  })
-  .catch(function (error) {
-    // обработка ошибки
-    console.log(error);
-  })
-  .finally(function () {
-    // выполняется всегда
-  });
+function createMarkup(arr) {
+  return arr.map(arr => arr.id).join('');
+}
