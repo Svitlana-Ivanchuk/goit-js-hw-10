@@ -22,7 +22,7 @@ function fetchBreeds() {
     return resp.json();
   });
 }
-console.log(fetchBreeds());
+// console.log(fetchBreeds());
 
 function fetchCatByBreed(breedId) {
   //https://api.thecatapi.com/v1/images/search?breed_ids=ідентифікатор_породи
