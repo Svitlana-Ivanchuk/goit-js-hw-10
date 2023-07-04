@@ -1,5 +1,5 @@
 'use strict';
-
+import Notiflix from 'notiflix';
 import axios from 'axios';
 
 axios.defaults.headers.common['x-api-key'] =
@@ -17,7 +17,11 @@ function fetchBreeds() {
     },
   }).then(resp => {
     if (!resp.ok) {
-      throw new Error(resp.statusText);
+      throw new Error(
+        Notiflix.Notify.failure(
+          'Oops! Something went wrong! Try reloading the page!'
+        )
+      );
     }
     return resp.json();
   });
@@ -37,5 +41,6 @@ function fetchCatByBreed(breedId) {
     return resp.json();
   });
 }
+// console.log(fetchCatByBreed('abys'));
 
 export { fetchBreeds, fetchCatByBreed };
