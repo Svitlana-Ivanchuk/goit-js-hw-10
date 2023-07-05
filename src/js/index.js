@@ -20,12 +20,13 @@ function onBreedSelect(evt) {
   const breedId = evt.currentTarget.value;
 
   fetchCatByBreed(breedId).then(renderCatInfoCard).catch(onFetchError);
+
+  evt.reset();
 }
 
 function createOptionsToSelect(data) {
   breeds = data;
   for (let i = 0; i < breeds.length; i += 1) {
-    breed = breeds[i];
     let option = document.createElement('option');
     selectEl.options.add(option);
     option.value = breeds[i].id;
