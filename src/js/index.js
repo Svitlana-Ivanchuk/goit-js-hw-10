@@ -3,8 +3,12 @@ import Notiflix from 'notiflix';
 
 const selectEl = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
+const loaderEl = document.querySelector('.loader');
+const errorEl = document.querySelector('.error');
 // let breedId = null;
 let breeds = [];
+
+// loaderEl.classList.replace('loader', 'is-hidden');
 
 selectEl.addEventListener('change', onBreedSelect);
 
@@ -13,14 +17,10 @@ function onBreedSelect(evt) {
 
   console.log(breedId);
   fetchBreeds();
-  fetchCatByBreed(breedId)
-    .then(renderCatInfoCard)
-    .catch(error => console.log(error));
+  fetchCatByBreed(breedId).then(renderCatInfoCard).catch(onFetchError);
 }
 
-fetchBreeds()
-  .then(createOptionsToSelect)
-  .catch(error => console.log(error));
+fetchBreeds().then(createOptionsToSelect).catch(onFetchError);
 
 function createOptionsToSelect(data) {
   breeds = data;
@@ -51,4 +51,19 @@ function createMarkup(arr) {
 </div>`
     )
     .join('');
+}
+
+export function onFetchError(error) {
+  // selectEl.classList.remove('is-hidden');
+  // loaderEl.classList.replace('loader', 'is-hidden');
+
+  Notiflix.Notify.failure(
+    'Oops! Something went wrong! Try reloading the page or select another cat breed!',
+    {
+      position: 'center-center',
+      timeout: 5000,
+      width: '400px',
+      fontSize: '24px',
+    }
+  );
 }

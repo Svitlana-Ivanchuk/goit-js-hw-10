@@ -1,6 +1,7 @@
 'use strict';
 import Notiflix from 'notiflix';
 import axios from 'axios';
+import { onFetchError } from './index';
 
 axios.defaults.headers.common['x-api-key'] =
   'live_cU8g1YfvYO4Xl2zaEwj6ftSMwAfh4kzsyfbHD65YbVDYIG5CbqVXU0GPY1Qhlcxx';
@@ -17,11 +18,7 @@ function fetchBreeds() {
     },
   }).then(resp => {
     if (!resp.ok) {
-      throw new Error(
-        Notiflix.Notify.failure(
-          'Oops! Something went wrong! Try reloading the page!'
-        )
-      );
+      throw new Error(onFetchError);
     }
     return resp.json();
   });
