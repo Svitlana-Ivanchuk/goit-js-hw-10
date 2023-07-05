@@ -5,22 +5,22 @@ const selectEl = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
 const loaderEl = document.querySelector('.loader');
 const errorEl = document.querySelector('.error');
-// let breedId = null;
+
 let breeds = [];
 
-// loaderEl.classList.replace('loader', 'is-hidden');
+selectEl.style.display = 'block';
+loaderEl.style.display = 'block';
+errorEl.style.display = 'none';
 
 selectEl.addEventListener('change', onBreedSelect);
+fetchBreeds().then(createOptionsToSelect).catch(onFetchError);
 
 function onBreedSelect(evt) {
+  loaderEl.style.display = 'none';
   const breedId = evt.currentTarget.value;
 
-  console.log(breedId);
-  fetchBreeds();
   fetchCatByBreed(breedId).then(renderCatInfoCard).catch(onFetchError);
 }
-
-fetchBreeds().then(createOptionsToSelect).catch(onFetchError);
 
 function createOptionsToSelect(data) {
   breeds = data;
@@ -54,8 +54,8 @@ function createMarkup(arr) {
 }
 
 export function onFetchError(error) {
-  // selectEl.classList.remove('is-hidden');
-  // loaderEl.classList.replace('loader', 'is-hidden');
+  selectEl.style.display = 'none';
+  loaderEl.style.display = 'none';
 
   Notiflix.Notify.failure(
     'Oops! Something went wrong! Try reloading the page or select another cat breed!',
