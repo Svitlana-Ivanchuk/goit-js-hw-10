@@ -41,6 +41,5 @@ function fetchCatByBreed(breedId) {
     return resp.json();
   });
 }
-// console.log(fetchCatByBreed('abys'));
 
 export { fetchBreeds, fetchCatByBreed };

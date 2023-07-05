@@ -3,76 +3,52 @@ import Notiflix from 'notiflix';
 
 const selectEl = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
-let breedId = null;
+// let breedId = null;
+let breeds = [];
 
 selectEl.addEventListener('change', onBreedSelect);
 
 function onBreedSelect(evt) {
+  const breedId = evt.currentTarget.value;
+
+  console.log(breedId);
   fetchBreeds();
-  breedId = evt.target.value;
-
-  // fetchBreeds(breed).then(data => {
-  //   catInfo.innerHTML = createMarkup(data);
-  // });
-
-  // fetchCatByBreed(breedId).then(data => {
-  //   catInfo.innerHTML = createMarkup(data);
-  // });
-
-  fetchBreeds().then(data => {
-    catInfo.insertAdjacentHTML('beforeend', createDescMarkup(data));
-  });
-
-  fetchCatByBreed(breedId).then(data => {
-    catInfo.insertAdjacentHTML('afterbegin', createPhotoMarkup(data));
-  });
+  fetchCatByBreed(breedId)
+    .then(renderCatInfoCard)
+    .catch(error => console.log(error));
 }
 
 fetchBreeds()
-  .then(data => {
-    selectBreed = data;
-    for (let i = 0; i < selectBreed.length; i += 1) {
-      breed = selectBreed[i];
-      let option = document.createElement('option');
-      selectEl.options.add(option);
-      option.value = selectBreed[i].id;
-      option.text = selectBreed[i].name;
-    }
-    return selectBreed;
-  })
+  .then(createOptionsToSelect)
   .catch(error => console.log(error));
 
-// function createMarkup(arr) {
-//   return arr
-//     .map(
-//       ({ name, temperament, description, url }) =>
-//         `<div><img src="${url}" ail="${name}" /></div>
-//         <div>
-//         <h2>${name}</h2>
-// <h3>${temperament}</h3>
-// <p>${description}</p>
-// </div>`
-//     )
-//     .join('');
-// }
-function createPhotoMarkup(arr) {
+function createOptionsToSelect(data) {
+  breeds = data;
+  for (let i = 0; i < breeds.length; i += 1) {
+    breed = breeds[i];
+    let option = document.createElement('option');
+    selectEl.options.add(option);
+    option.value = breeds[i].id;
+    option.text = breeds[i].name;
+  }
+  return breeds;
+}
+
+function renderCatInfoCard(breedId) {
+  const markcup = createMarkup(breedId);
+  catInfo.innerHTML = markcup;
+}
+
+function createMarkup(arr) {
   return arr
     .map(
-      ({ name, url }) =>
-        `<div><img src="${url}" ail="${name}" /></div>
-        <div>`
-    )
-    .join('');
-}
-function createDescMarkup(data) {
-  return data
-    .map(
-      ({ name, temperament, description }) =>
-        `<div>
+      ({ breeds: [{ name, temperament, description }], url }) =>
+        `<div><img src="${url}" alt="${name}" /></div>
+        <div>
         <h2>${name}</h2>
-        <h3>${temperament}</h3>
-        <p>${description}</p>
-        </div>`
+<h3>${temperament}</h3>
+<p>${description}</p>
+</div>`
     )
     .join('');
 }

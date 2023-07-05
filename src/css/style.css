@@ -4,6 +4,7 @@
 
 .cat-info {
   display: flex;
+  gap: 20px;
 }
 
 img {
