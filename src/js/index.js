@@ -1,37 +1,46 @@
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
 import Notiflix from 'notiflix';
+import SlimSelect from 'slim-select';
 
 const selectEl = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
-const loaderEl = document.querySelector('.loader');
+const loaderEl = document.querySelector('.loader-wrapper');
 const errorEl = document.querySelector('.error');
 
 let breeds = [];
 
-selectEl.style.display = 'block';
-loaderEl.style.display = 'block';
+selectEl.style.display = 'none';
+loaderEl.style.display = 'flex';
 errorEl.style.display = 'none';
 
 selectEl.addEventListener('change', onBreedSelect);
-fetchBreeds().then(createOptionsToSelect).catch(onFetchError);
+fetchBreeds(breeds)
+  .then(data => {
+    createOptionsToSelect(data);
+    selectEl.style.display = 'block';
+  })
+  .catch(onFetchError)
+  .finally(hiddenLoader);
 
 function onBreedSelect(evt) {
-  loaderEl.style.display = 'none';
   const breedId = evt.currentTarget.value;
-
-  fetchCatByBreed(breedId).then(renderCatInfoCard).catch(onFetchError);
-
-  evt.reset();
+  loaderEl.style.display = 'flex';
+  catInfo.innerHTML = '';
+  fetchCatByBreed(breedId)
+    .then(renderCatInfoCard)
+    .catch(onFetchError)
+    .finally(hiddenLoader);
 }
 
 function createOptionsToSelect(data) {
   breeds = data;
   for (let i = 0; i < breeds.length; i += 1) {
     let option = document.createElement('option');
-    selectEl.options.add(option);
     option.value = breeds[i].id;
     option.text = breeds[i].name;
+    selectEl.options.add(option);
   }
+
   return breeds;
 }
 
@@ -45,9 +54,9 @@ function createMarkup(arr) {
     .map(
       ({ breeds: [{ name, temperament, description }], url }) =>
         `<div><img src="${url}" alt="${name}" /></div>
-        <div>
-        <h2>${name}</h2>
-<h3>${temperament}</h3>
+        <div class="cat-desc">
+        <h2>Breed: ${name}</h2>
+<h3>Temperament: ${temperament}</h3>
 <p>${description}</p>
 </div>`
     )
@@ -67,4 +76,8 @@ export function onFetchError(error) {
       fontSize: '24px',
     }
   );
+}
+
+function hiddenLoader() {
+  loaderEl.style.display = 'none';
 }
