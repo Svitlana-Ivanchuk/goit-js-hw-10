@@ -1,6 +1,6 @@
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
 import Notiflix from 'notiflix';
-import SlimSelect from 'slim-select';
+// import SlimSelect from 'slim-select';
 
 const selectEl = document.querySelector('.breed-select');
 const catInfo = document.querySelector('.cat-info');
@@ -81,3 +81,7 @@ export function onFetchError(error) {
 function hiddenLoader() {
   loaderEl.style.display = 'none';
 }
+// не знаю куда вставить, от него все ломается и виснет
+// new SlimSelect({
+//   select: document.querySelector('.breed-select'),
+// });
