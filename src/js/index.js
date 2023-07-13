@@ -45,8 +45,7 @@ function createOptionsToSelect(data) {
 }
 
 function renderCatInfoCard(breedId) {
-  const markcup = createMarkup(breedId);
-  catInfo.innerHTML = markcup;
+  catInfo.innerHTML = createMarkup(breedId);
 }
 
 function createMarkup(arr) {
